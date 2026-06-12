@@ -1,0 +1,42 @@
+[
+  {
+    "id": "tee",
+    "externalId": "demo-tee-01",
+    "title": "Classic Graphic Tee",
+    "description": "Soft cotton crew-neck t-shirt with a minimal streetwear print",
+    "price": 29,
+    "image": "/products/tee.webp"
+  },
+  {
+    "id": "hoodie",
+    "externalId": "demo-hoodie-01",
+    "title": "Oversized Hoodie",
+    "description": "Heavyweight fleece hoodie with a relaxed fit and kangaroo pocket",
+    "price": 59,
+    "image": "/products/hoodie.webp"
+  },
+  {
+    "id": "jacket",
+    "externalId": "demo-jacket-01",
+    "title": "Cropped Leather Jacket",
+    "description": "Structured cropped jacket with a clean silhouette for layering",
+    "price": 129,
+    "image": "/products/jacket.webp"
+  },
+  {
+    "id": "dress",
+    "externalId": "demo-dress-01",
+    "title": "Summer Midi Dress",
+    "description": "Lightweight midi dress with a flattering A-line cut for warm days",
+    "price": 79,
+    "image": "/products/dress.webp"
+  },
+  {
+    "id": "cap",
+    "externalId": "demo-cap-01",
+    "title": "Structured Baseball Cap",
+    "description": "Classic six-panel cap with an adjustable strap and curved brim",
+    "price": 24,
+    "image": "/products/cap.webp"
+  }
+]
