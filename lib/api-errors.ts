@@ -12,7 +12,7 @@ export function errorMessage(error: unknown): string {
   }
 
   if (error instanceof ProductNotFoundError) {
-    return "Product not found in your Genlook catalog. This demo upserts inline, so retry once.";
+    return "Product not found in your Genlook catalog. Retry the try-on.";
   }
 
   if (error instanceof GenerationNotFoundError) {

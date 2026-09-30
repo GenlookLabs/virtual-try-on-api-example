@@ -49,7 +49,7 @@ export function TryOnWidget({ productId, productTitle, productImage }: TryOnWidg
 
     try {
       await uploadPhoto(file);
-      setMessage("Photo saved for this session — try on any product.");
+      setMessage("Photo saved for this session. Try on any product.");
     } catch {
       // uploadError set in context
     } finally {
@@ -93,7 +93,7 @@ export function TryOnWidget({ productId, productTitle, productImage }: TryOnWidg
     }
 
     setPhase("generating");
-    setMessage("Starting try-on with your saved imageId…");
+    setMessage("Generating your try-on, about 10 seconds…");
     setResultUrl(null);
 
     try {
@@ -103,13 +103,26 @@ export function TryOnWidget({ productId, productTitle, productImage }: TryOnWidg
         body: JSON.stringify({ productId, imageId, useMock }),
       });
 
-      const payload = (await response.json()) as { generationId?: string; error?: string };
+      const payload = (await response.json()) as {
+        status?: 200 | 202;
+        generationId?: string;
+        resultImageUrl?: string;
+        error?: string;
+      };
 
       if (!response.ok || !payload.generationId) {
         throw new Error(payload.error ?? "Failed to start try-on.");
       }
 
-      setMessage("Generating your try-on result…");
+      if (payload.status === 200 && payload.resultImageUrl) {
+        setResultUrl(payload.resultImageUrl);
+        setPhase("completed");
+        setMessage("Your virtual try-on is ready.");
+        return;
+      }
+
+      // Rare: still running after 90 s, so poll for the result.
+      setMessage("Still generating…");
       await pollGeneration(payload.generationId);
     } catch (error) {
       setPhase("failed");
@@ -163,7 +176,7 @@ export function TryOnWidget({ productId, productTitle, productImage }: TryOnWidg
             </div>
             <p className="description">
               Calls <code>POST /images/upload</code>. Your <code>imageId</code> is saved for the whole
-              session — browse other products without re-uploading.
+              session, so you can browse other products without re-uploading.
             </p>
 
             <button
@@ -187,8 +200,8 @@ export function TryOnWidget({ productId, productTitle, productImage }: TryOnWidg
               <h3>Generate try-on</h3>
             </div>
             <p className="description">
-              Calls <code>POST /try-on</code> with <code>customer.id</code> referencing your saved{" "}
-              <code>imageId</code> for <strong>{productTitle}</strong>.
+              Calls <code>POST /try-on/sync</code> with your saved <code>imageId</code> for{" "}
+              <strong>{productTitle}</strong>. The result comes back in the same request.
             </p>
 
             <div className="preview-row">

@@ -1,119 +1,71 @@
-# Virtual Try-On API Example (Next.js + @genlook/api)
+# Virtual Try-On API example (Next.js)
 
-A minimal e-commerce mock that shows how to integrate the [Genlook virtual try-on API](https://genlook.app/docs/tryon-api/introduction) using the official [`@genlook/api`](https://www.npmjs.com/package/@genlook/api) TypeScript SDK.
+A small storefront that adds virtual try-on to product pages with the [Genlook Try-On API](https://genlook.app/docs/tryon-api/introduction). A shopper uploads one photo, then sees any product of the catalog on themselves in about 10 seconds.
 
-This demo follows the **recommended two-step flow** from the [quickstart](https://genlook.app/docs/tryon-api/quickstart):
+![A person photo and a trench coat, then the try-on result](docs/before-after.jpg)
 
-1. **Upload** the customer photo once → get an `imageId`
-2. **Try-on** any product referencing that `imageId`
-3. **Poll** generation status until complete
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGenlookLabs%2Fvirtual-try-on-api-example&env=GENLOOK_API_KEY&envDescription=Your%20Genlook%20API%20key%20(10%20free%20credits%20on%20signup)&envLink=https%3A%2F%2Fplatform.genlook.app&project-name=virtual-try-on-example)
 
-The same `imageId` is reused across all 5 products — no re-upload when browsing the catalog.
+Want to see results before running anything? [Try it in the browser](https://huggingface.co/spaces/Genlook/virtual-try-on).
 
-## What's included
+## How it works
 
-- A 5-product JSON catalog (`data/products.json`)
-- Product images in `public/products/`
-- Step 1: customer photo upload (`POST /api/images/upload`)
-- Step 2: try-on with `customer.id` (`POST /api/try-on`)
-- Step 3: generation polling (`GET /api/generations/:id`)
-- Server-side API routes so your API key never reaches the browser
+1. **Upload the photo once.** `POST /images/upload` returns an `imageId`, kept for the whole session.
+2. **Register each product once.** `POST /products` with the product image, title and description. Genlook analyzes it right away, so its first try-on is fast.
+3. **Try on in one call.** `POST /try-on/sync` with the product `externalId` and the `imageId`. The result image comes back in the same request.
 
-## Why a server proxy?
+The demo registers a product the first time it is tried on (it retries after `PRODUCT_NOT_FOUND`), so there is no setup script. The browser only talks to Next.js API routes: your API key stays on the server.
 
-The Genlook SDK is designed for server runtimes (Node 20+, Deno, Bun, Edge). API keys must stay on your backend. The browser calls Next.js API routes; those routes call `@genlook/api` server-side.
+## Run it locally
 
-## Quick start
-
-### 1. Get an API key
-
-Create a Genlook Try-On API account and copy your key:
-
-[https://genlook.app/try-on/api](https://genlook.app/try-on/api)
-
-### 2. Install and configure
+You need Node 20+ and an API key from [platform.genlook.app](https://platform.genlook.app). New accounts get 10 free credits, and each try-on costs 1 credit.
 
 ```bash
-cd virtual-try-on-api-example
-pnpm install --ignore-workspace
+pnpm install
+```
+
+```bash
 cp .env.example .env.local
 ```
 
-When this folder lives inside the Genlook monorepo, use `pnpm install --ignore-workspace` so it gets its own isolated `node_modules` and pulls `@genlook/api` from npm. When you move it to a standalone repo, a normal `pnpm install` is enough.
-
-Edit `.env.local`:
+Put your key in `.env.local`:
 
 ```env
 GENLOOK_API_KEY=gk_your_key_here
-GENLOOK_USE_MOCK=true
 ```
-
-`GENLOOK_USE_MOCK=true` routes generations through the mock engine (free, instant, great for local testing). Uncheck the mock toggle in the UI or set the env var to `false` for real AI try-ons.
-
-### 3. Run the demo
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3600](http://localhost:3600), pick a product, and use the **Try it on** widget:
+Open [http://localhost:3600](http://localhost:3600), pick a product, upload a photo and press **Try it on**.
 
-1. **Step 1** — upload your photo in the widget (`POST /images/upload` → `imageId`)
-2. **Step 2** — click **Try it on** (`POST /try-on` with `customer.id`)
-3. Browse another product — your photo is still saved, no re-upload needed
+Tick **Use mock engine** to test the flow without a real generation: it returns your photo unchanged, instantly. It still counts as a try-on.
 
-## Project structure
+## Where the code is
 
 ```text
-virtual-try-on-api-example/
-├── app/
-│   ├── api/
-│   │   ├── images/upload/route.ts   # Step 1: client.images.upload
-│   │   ├── try-on/route.ts          # Step 2: client.tryOn.create (customer.id)
-│   │   └── generations/[id]/route.ts # Step 3: poll status
-│   ├── product/[id]/page.tsx        # product detail + try-on widget
-│   └── page.tsx                     # product grid
-├── components/
-│   ├── CustomerPhotoProvider.tsx    # session imageId across pages
-│   ├── TryOnWidget.tsx              # 2-step widget (upload + try-on)
-│   └── AppShell.tsx                 # header + provider
-├── data/products.json
-├── lib/
-│   ├── genlook.ts
-│   ├── products.ts
-│   └── api-errors.ts
-└── public/products/
+app/api/images/upload/route.ts     # step 1: upload the photo (SDK: client.images.upload)
+app/api/try-on/route.ts            # steps 2 and 3: register the product, POST /try-on/sync
+app/api/generations/[id]/route.ts  # fallback when a try-on takes more than 90 s (202)
+lib/genlook.ts                     # SDK client + the tryOnSync helper
+components/TryOnWidget.tsx         # the try-on widget on the product page
+data/products.json                 # the 5-product catalog
 ```
 
-## SDK flow
+## Use it with your catalog
 
-```text
-Browser                    Next.js API route              Genlook API
-───────                    ─────────────────              ───────────
-POST /api/images/upload →  client.images.upload()    →   POST /images/upload
-                           ← imageId
-
-POST /api/try-on        →  client.tryOn.create()     →   POST /try-on
-  { productId, imageId }     customer: { id: imageId }
-
-GET /api/generations/:id → client.generations.retrieve() → GET /generations/:id
-```
-
-## Mock engine
-
-For development without spending credits, enable mock mode:
-
-- Set `GENLOOK_USE_MOCK=true` in `.env.local`, or
-- Keep the **Use mock engine** checkbox enabled in the UI
-
-Mock mode sets `product.title` to `"mock"`, which returns the uploaded customer photo as the generated result in ~1–2 seconds.
+Replace `data/products.json` and the images in `public/products/`. Keep each `externalId` stable: it is how Genlook finds a product it has already analyzed. Send the full product title and description, they help the model understand what the item is and how it is cut.
 
 ## Links
 
-- npm package: [@genlook/api](https://www.npmjs.com/package/@genlook/api)
-- API introduction: [genlook.app/docs/tryon-api/introduction](https://genlook.app/docs/tryon-api/introduction)
-- Quickstart: [genlook.app/docs/tryon-api/quickstart](https://genlook.app/docs/tryon-api/quickstart)
-- Get an API key: [genlook.app/try-on/api](https://genlook.app/try-on/api)
+- [Docs](https://genlook.app/docs/tryon-api/introduction) and [quickstart](https://genlook.app/docs/tryon-api/quickstart)
+- [`POST /try-on/sync` reference](https://genlook.app/docs/tryon-api/endpoints/create-try-on-sync)
+- [`@genlook/api` TypeScript SDK](https://www.npmjs.com/package/@genlook/api)
+- [Pricing](https://genlook.app/developers#pricing): from $0.04 per try-on, monthly plans for volume
+- [Try it in the browser](https://huggingface.co/spaces/Genlook/virtual-try-on)
+
+Questions: hello@genlook.app
 
 ## License
 

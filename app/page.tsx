@@ -10,7 +10,7 @@ export default function HomePage() {
         <h1>Shop the collection</h1>
         <p>
           A minimal e-commerce mock powered by the Genlook virtual try-on API.
-          Open any product to use the virtual fitting room widget — upload once,
+          Open any product, upload your photo once,
           then try on every item in the catalog.
         </p>
       </section>

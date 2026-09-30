@@ -2,7 +2,7 @@
   "name": "virtual-try-on-api-example",
   "version": "0.1.0",
   "private": true,
-  "description": "Virtual try-on API example — Next.js storefront demo using @genlook/api",
+  "description": "Virtual try-on API example: a Next.js storefront using the Genlook Try-On API",
   "scripts": {
     "dev": "next dev --port 3600",
     "build": "next build",
@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@genlook/api": "^0.1.2",
+    "@genlook/api": "^0.1.3",
     "next": "^15.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
