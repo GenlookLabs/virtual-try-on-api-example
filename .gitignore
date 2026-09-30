@@ -16,3 +16,6 @@ out/
 *.pem
 npm-debug.log*
 pnpm-debug.log*
+
+# typescript
+*.tsbuildinfo
