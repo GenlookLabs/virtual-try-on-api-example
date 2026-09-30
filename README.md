@@ -1,12 +1,12 @@
 # Virtual Try-On API example (Next.js)
 
-A small storefront that adds virtual try-on to product pages with the [Genlook Try-On API](https://genlook.app/docs/tryon-api/introduction). A shopper uploads one photo, then sees any product of the catalog on themselves in about 10 seconds.
+A small storefront that adds virtual try-on to product pages with the [Genlook Try-On API](https://genlook.app/docs/tryon-api/introduction?utm_source=github&utm_medium=readme&utm_campaign=api_example). A shopper uploads one photo, then sees any product of the catalog on themselves in about 10 seconds.
 
 ![A person photo and a trench coat, then the try-on result](docs/before-after.jpg)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGenlookLabs%2Fvirtual-try-on-api-example&env=GENLOOK_API_KEY&envDescription=Your%20Genlook%20API%20key%20(10%20free%20credits%20on%20signup)&envLink=https%3A%2F%2Fplatform.genlook.app&project-name=virtual-try-on-example)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGenlookLabs%2Fvirtual-try-on-api-example&env=GENLOOK_API_KEY&envDescription=Your%20Genlook%20API%20key%20(10%20free%20credits%20on%20signup)&envLink=https%3A%2F%2Fplatform.genlook.app%3Futm_source%3Dgithub%26utm_medium%3Dreadme%26utm_campaign%3Dapi_example&project-name=virtual-try-on-example)
 
-Want to see results before running anything? [Try it in the browser](https://huggingface.co/spaces/Genlook/virtual-try-on).
+Want to see results before running anything? [Try it in the browser](https://huggingface.co/spaces/Genlook/virtual-try-on?utm_source=github&utm_medium=readme&utm_campaign=api_example).
 
 ## How it works
 
@@ -18,7 +18,7 @@ The demo registers a product the first time it is tried on (it retries after `PR
 
 ## Run it locally
 
-You need Node 20+ and an API key from [platform.genlook.app](https://platform.genlook.app). New accounts get 10 free credits, and each try-on costs 1 credit.
+You need Node 20+ and an API key from [platform.genlook.app](https://platform.genlook.app?utm_source=github&utm_medium=readme&utm_campaign=api_example). New accounts get 10 free credits, and each try-on costs 1 credit.
 
 ```bash
 pnpm install
@@ -59,11 +59,11 @@ Replace `data/products.json` and the images in `public/products/`. Keep each `ex
 
 ## Links
 
-- [Docs](https://genlook.app/docs/tryon-api/introduction) and [quickstart](https://genlook.app/docs/tryon-api/quickstart)
-- [`POST /try-on/sync` reference](https://genlook.app/docs/tryon-api/endpoints/create-try-on-sync)
+- [Docs](https://genlook.app/docs/tryon-api/introduction?utm_source=github&utm_medium=readme&utm_campaign=api_example) and [quickstart](https://genlook.app/docs/tryon-api/quickstart?utm_source=github&utm_medium=readme&utm_campaign=api_example)
+- [`POST /try-on/sync` reference](https://genlook.app/docs/tryon-api/endpoints/create-try-on-sync?utm_source=github&utm_medium=readme&utm_campaign=api_example)
 - [`@genlook/api` TypeScript SDK](https://www.npmjs.com/package/@genlook/api)
-- [Pricing](https://genlook.app/developers#pricing): from $0.04 per try-on, monthly plans for volume
-- [Try it in the browser](https://huggingface.co/spaces/Genlook/virtual-try-on)
+- [Pricing](https://genlook.app/developers?utm_source=github&utm_medium=readme&utm_campaign=api_example#pricing): from $0.04 per try-on, monthly plans for volume
+- [Try it in the browser](https://huggingface.co/spaces/Genlook/virtual-try-on?utm_source=github&utm_medium=readme&utm_campaign=api_example)
 
 Questions: hello@genlook.app
 

@@ -39,16 +39,16 @@ export default function HomePage() {
           @genlook/api
         </a>
         . See the{" "}
-        <a href="https://genlook.app/docs/tryon-api/introduction" target="_blank" rel="noreferrer">
+        <a href="https://genlook.app/docs/tryon-api/introduction?utm_source=github&utm_medium=demo_app&utm_campaign=api_example" target="_blank" rel="noreferrer">
           API introduction
         </a>{" "}
         and{" "}
-        <a href="https://genlook.app/docs/tryon-api/quickstart" target="_blank" rel="noreferrer">
+        <a href="https://genlook.app/docs/tryon-api/quickstart?utm_source=github&utm_medium=demo_app&utm_campaign=api_example" target="_blank" rel="noreferrer">
           quickstart
         </a>
         . Get an API key at{" "}
-        <a href="https://genlook.app/try-on/api" target="_blank" rel="noreferrer">
-          genlook.app/try-on/api
+        <a href="https://platform.genlook.app?utm_source=github&utm_medium=demo_app&utm_campaign=api_example" target="_blank" rel="noreferrer">
+          platform.genlook.app
         </a>
         .
       </p>
